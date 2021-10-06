@@ -1,13 +1,13 @@
 import React, { useEffect, useState, FC } from "react";
 
 import { useStore } from "@/store";
-import { text } from "@/data";
+import { screenplay } from "@/data";
 import { TScene, TAction } from "@/types";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
 
 export const TextLoader = () => {
-  const { select, setSelect } = useStore();
+  const { select } = useStore();
   const [scene, setScene] = useState<TScene>([]);
   const [showIndex, setShowIndex] = useState(1);
   const sceneLoader = scene.slice(0, showIndex);
@@ -15,7 +15,7 @@ export const TextLoader = () => {
 
   useEffect(() => {
     setShowIndex(1);
-    setScene(text[select]);
+    setScene(screenplay[select]);
   }, [select]);
 
   const handleNext = () => {
@@ -57,11 +57,7 @@ const SceneItem = ({ scene }: { scene: string | TAction }) => {
       }
       clearTimer();
       timer = setTimeout(() => {
-        const actions = scene.data ?? [];
-        const actionsLength = actions.length;
-        const randSelect = Math.floor(Math.random() * actionsLength);
-
-        setSelect(actions[randSelect][1]);
+        setSelect("end-noselect");
       }, scene.timeout * 1000);
     };
 
