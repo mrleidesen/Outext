@@ -1,7 +1,7 @@
 export type TScene = (string | TAction)[];
 
 export type TAction = {
-  action: "setUserName" | "select";
+  action: "finish" | "select" | "end";
   data?: string[][];
   timeout?: number;
 };

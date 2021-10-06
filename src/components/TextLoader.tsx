@@ -40,7 +40,8 @@ export const TextLoader = () => {
 };
 
 const SceneItem = ({ scene }: { scene: string | TAction }) => {
-  const { setSelect } = useStore();
+  const { setSelect, setIsFinish, setDeathCount, setGameFinishTime } =
+    useStore();
   const itemIsString = typeof scene === "string";
 
   if (itemIsString) {
@@ -75,7 +76,14 @@ const SceneItem = ({ scene }: { scene: string | TAction }) => {
     };
   }, [scene.timeout]);
 
-  if (scene.action === "select") {
+  const handleActionClick = (type: string, select: string) => {
+    if (type === "end") {
+      setDeathCount((count) => count + 1);
+    }
+    setSelect(select);
+  };
+
+  if (scene.action === "select" || scene.action === "end") {
     return (
       <div className="flex flex-col w-full mt-3">
         {scene.timeout && <Countdown count={scene.timeout} />}
@@ -84,12 +92,28 @@ const SceneItem = ({ scene }: { scene: string | TAction }) => {
             <Button
               key={action[0]}
               className="mb-2"
-              onClick={() => setSelect(action[1])}
+              onClick={() => {
+                handleActionClick(scene.action, action[1]);
+              }}
             >
               {action[0]}
             </Button>
           ))}
       </div>
+    );
+  }
+
+  if (scene.action === "finish") {
+    return (
+      <Button
+        className="mt-3"
+        onClick={() => {
+          setGameFinishTime((time) => [...time, Date.now()]);
+          setIsFinish(true);
+        }}
+      >
+        结束游戏
+      </Button>
     );
   }
 

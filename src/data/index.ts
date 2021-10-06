@@ -8,7 +8,10 @@ const action = (data: string[][], timeout?: number): TAction => {
   };
 };
 
-const endAction = action([["你挂了 - 重来", "1"]]);
+const endAction: TAction = {
+  action: "end",
+  data: [["你挂了 - 重新开始", "1"]],
+};
 
 export const screenplay: { [key: string]: TScene } = {
   "1": [
@@ -400,6 +403,7 @@ export const screenplay: { [key: string]: TScene } = {
     "你闭眼纵身一跃",
     "坠落瞬间你突然惊醒",
     "不知为何，是场梦",
-    "但，真的是梦吗",
+    "但，真的是梦吗？",
+    { action: "finish" },
   ],
 };
