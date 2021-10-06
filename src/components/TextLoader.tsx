@@ -2,8 +2,9 @@ import React, { useEffect, useState, FC } from "react";
 
 import { useStore } from "@/store";
 import { text } from "@/data";
-import { TScene } from "@/types";
+import { TScene, TAction } from "@/types";
 import { Button } from "./Button";
+import { Countdown } from "./Countdown";
 
 export const TextLoader = () => {
   const { select, setSelect } = useStore();
@@ -25,33 +26,10 @@ export const TextLoader = () => {
   };
 
   return (
-    <div className="p-2 flex flex-col items-center">
-      {sceneLoader.map((item, idx) => {
-        if (typeof item === "string") {
-          return (
-            <p key={idx} className="text-center mb-1.5">
-              {item}
-            </p>
-          );
-        }
-
-        if (item.action === "select") {
-          return (
-            <div key={idx} className="flex flex-col">
-              {item.data &&
-                item.data.map((action) => (
-                  <Button
-                    key={action[0]}
-                    className="mb-2"
-                    onClick={() => setSelect(action[1])}
-                  >
-                    {action[0]}
-                  </Button>
-                ))}
-            </div>
-          );
-        }
-      })}
+    <div className="p-2 flex flex-col items-center w-full">
+      {sceneLoader.map((item, idx) => (
+        <SceneItem key={idx} scene={item} />
+      ))}
       {lastIsString && (
         <Button className="fixed bottom-4 w-5/6" onClick={handleNext}>
           下一步
@@ -59,4 +37,65 @@ export const TextLoader = () => {
       )}
     </div>
   );
+};
+
+const SceneItem = ({ scene }: { scene: string | TAction }) => {
+  const { setSelect } = useStore();
+  const itemIsString = typeof scene === "string";
+
+  if (itemIsString) {
+    return <p className="text-center mb-1.5">{scene}</p>;
+  }
+
+  useEffect(() => {
+    let timer: number | null = null;
+
+    const setTimer = () => {
+      if (!scene.timeout) {
+        clearTimer();
+        return;
+      }
+      clearTimer();
+      timer = setTimeout(() => {
+        const actions = scene.data ?? [];
+        const actionsLength = actions.length;
+        const randSelect = Math.floor(Math.random() * actionsLength);
+
+        setSelect(actions[randSelect][1]);
+      }, scene.timeout * 1000);
+    };
+
+    const clearTimer = () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    };
+
+    setTimer();
+
+    return () => {
+      clearTimer();
+    };
+  }, [scene.timeout]);
+
+  if (scene.action === "select") {
+    return (
+      <div className="flex flex-col w-full mt-3">
+        {scene.timeout && <Countdown count={scene.timeout} />}
+        {scene.data &&
+          scene.data.map((action) => (
+            <Button
+              key={action[0]}
+              className="mb-2"
+              onClick={() => setSelect(action[1])}
+            >
+              {action[0]}
+            </Button>
+          ))}
+      </div>
+    );
+  }
+
+  return <p>Error!</p>;
 };

@@ -6,7 +6,7 @@ export const Button: React.FC<{
 }> = ({ children, className, onClick }) => {
   return (
     <button
-      className={`border border-white px-2 py-1 hover:bg-white hover:text-gray-600 ${className}`}
+      className={`border border-white px-2 py-1 ${className}`}
       onClick={onClick}
     >
       {children}
