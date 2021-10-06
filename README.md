@@ -1,14 +1,13 @@
-# react-vite-tailwind-template
-已经集成`vite2`+`react-ts`+`tailwind css`+`alias`  
+# Outext
 
-## 下载
-* 通过`Download ZIP`
-* Git clone
-```
-git clone https://github.com/mrleidesen/react-vite-tailwind-template.git
-```
+文字类逃脱游戏
 
 ## 运行
-> npm run install  
 
-> npm run dev
+```shell
+npm install pnpm
+
+pnpm install
+
+pnpm dev
+```
