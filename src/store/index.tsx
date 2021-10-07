@@ -12,6 +12,7 @@ interface Store {
   setDeathCount: SetStateAction<number>;
   gameFinishTime: number[];
   setGameFinishTime: SetStateAction<number[]>;
+  restart: () => void;
 }
 
 const StoreContext = createContext<Store>({} as Store);
@@ -24,6 +25,14 @@ export const Store: FC = ({ children }) => {
   const [isFinish, setIsFinish] = useState(false);
   const [deathCount, setDeathCount] = useState(0);
   const [gameFinishTime, setGameFinishTime] = useState<number[]>([]);
+
+  const restart = () => {
+    setIsStart(false);
+    setSelect("1");
+    setIsFinish(false);
+    setDeathCount(0);
+    setGameFinishTime([]);
+  };
 
   return (
     <StoreContext.Provider
@@ -38,6 +47,7 @@ export const Store: FC = ({ children }) => {
         setDeathCount,
         gameFinishTime,
         setGameFinishTime,
+        restart,
       }}
     >
       {children}

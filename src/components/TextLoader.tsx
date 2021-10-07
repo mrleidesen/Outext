@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useStore } from "@/store";
 import { screenplay } from "@/data";
