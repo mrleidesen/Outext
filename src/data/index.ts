@@ -1,6 +1,6 @@
-import { TScene, TAction } from "@/types";
+import { TScene, TAction, TActionData } from "@/types";
 
-const action = (data: string[][], timeout?: number): TAction => {
+const action = (data: TActionData, timeout?: number): TAction => {
   return {
     action: "select",
     data,

@@ -1,7 +1,16 @@
 export type TScene = (string | TAction)[];
 
+type TActionLabel = string;
+type TActionValue = string;
+type TActionLimit = {
+  type: "Power" | "Speed";
+  minValue: number;
+};
+
+export type TActionData = [TActionLabel, TActionValue, TActionLimit?][];
+
 export type TAction = {
   action: "finish" | "select" | "end";
-  data?: string[][];
+  data?: TActionData;
   timeout?: number;
 };
