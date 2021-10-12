@@ -3,7 +3,7 @@ export type TScene = (string | TAction)[];
 type TActionLabel = string;
 type TActionValue = string;
 type TActionLimit = {
-  type: "Power" | "Speed";
+  type: "power" | "speed";
   minValue: number;
 };
 

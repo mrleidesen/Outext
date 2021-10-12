@@ -1,7 +1,13 @@
 import React, { FC, createContext, useContext, useState } from "react";
 
 type SetStateAction<T> = React.Dispatch<React.SetStateAction<T>>;
+type User = {
+  power: number;
+  speed: number;
+};
 interface Store {
+  user: User;
+  setUser: SetStateAction<User>;
   isStart: boolean;
   setIsStart: SetStateAction<boolean>;
   select: string;
@@ -20,6 +26,10 @@ const StoreContext = createContext<Store>({} as Store);
 export const useStore = () => useContext(StoreContext);
 
 export const Store: FC = ({ children }) => {
+  const [user, setUser] = useState<User>({
+    power: 5,
+    speed: 5,
+  });
   const [isStart, setIsStart] = useState(false);
   const [select, setSelect] = useState("1");
   const [isFinish, setIsFinish] = useState(false);
@@ -37,6 +47,8 @@ export const Store: FC = ({ children }) => {
   return (
     <StoreContext.Provider
       value={{
+        user,
+        setUser,
         isStart,
         setIsStart,
         select,
