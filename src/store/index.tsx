@@ -1,10 +1,8 @@
+import { User } from "@/types";
 import React, { FC, createContext, useContext, useState } from "react";
 
 type SetStateAction<T> = React.Dispatch<React.SetStateAction<T>>;
-type User = {
-  power: number;
-  speed: number;
-};
+
 interface Store {
   user: User;
   setUser: SetStateAction<User>;
@@ -18,6 +16,8 @@ interface Store {
   setDeathCount: SetStateAction<number>;
   gameFinishTime: number[];
   setGameFinishTime: SetStateAction<number[]>;
+  attributeCount: number;
+  setAttributeCount: SetStateAction<number>;
   restart: () => void;
 }
 
@@ -29,11 +29,15 @@ export const Store: FC = ({ children }) => {
   const [user, setUser] = useState<User>({
     power: 5,
     speed: 5,
+    wise: 5,
+    sneak: 5,
+    luck: 5,
   });
   const [isStart, setIsStart] = useState(false);
   const [select, setSelect] = useState("1");
   const [isFinish, setIsFinish] = useState(false);
   const [deathCount, setDeathCount] = useState(0);
+  const [attributeCount, setAttributeCount] = useState(0);
   const [gameFinishTime, setGameFinishTime] = useState<number[]>([]);
 
   const restart = () => {
@@ -41,6 +45,7 @@ export const Store: FC = ({ children }) => {
     setSelect("1");
     setIsFinish(false);
     setDeathCount(0);
+    setAttributeCount(0);
     setGameFinishTime([]);
   };
 
@@ -57,6 +62,8 @@ export const Store: FC = ({ children }) => {
         setIsFinish,
         deathCount,
         setDeathCount,
+        attributeCount,
+        setAttributeCount,
         gameFinishTime,
         setGameFinishTime,
         restart,
