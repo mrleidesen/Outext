@@ -1,5 +1,7 @@
 # Outext
 
+> 最喜欢的恐怖游戏是《Outlast》，取名 Outtext -> Outext
+
 文字类逃脱游戏，急中生智，逃离这个恐怖医院
 
 ## 规则

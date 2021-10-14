@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { useStore } from "@/store";
 import { screenplay } from "@/data";
-import { TScene, TAction } from "@/types";
+import {
+  TScene,
+  TAction,
+  TActionList,
+  TActionType,
+  TActionLimit,
+} from "@/types";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
 
@@ -36,6 +42,60 @@ export const TextLoader = () => {
         </Button>
       )}
     </div>
+  );
+};
+
+const SceneSelector = ({
+  actions,
+  type,
+}: {
+  actions: TActionList;
+  type: TActionType;
+}) => {
+  const { user, setSelect, setDeathCount } = useStore();
+
+  const handleActionClick = (type: TActionType, select: string) => {
+    if (type === "end") {
+      setDeathCount((count) => count + 1);
+    }
+    setSelect(select);
+  };
+
+  const isFits = (values?: TActionLimit[]): boolean => {
+    let isFits = true;
+
+    if (values) {
+      for (const limit of values) {
+        const { type, minValue } = limit;
+        const userValue = user[type];
+        if (userValue < minValue) {
+          isFits = false;
+          break;
+        }
+      }
+    }
+
+    return isFits;
+  };
+
+  return (
+    <>
+      {actions.map((action) => {
+        if (isFits(action[2])) {
+          return (
+            <Button
+              key={action[0]}
+              className="mb-2"
+              onClick={() => {
+                handleActionClick(type, action[1]);
+              }}
+            >
+              {action[0]}
+            </Button>
+          );
+        }
+      })}
+    </>
   );
 };
 
@@ -76,29 +136,13 @@ const SceneItem = ({ scene }: { scene: string | TAction }) => {
     };
   }, [scene.timeout]);
 
-  const handleActionClick = (type: string, select: string) => {
-    if (type === "end") {
-      setDeathCount((count) => count + 1);
-    }
-    setSelect(select);
-  };
-
   if (scene.action === "select" || scene.action === "end") {
     return (
       <div className="flex flex-col w-full mt-3">
         {scene.timeout && <Countdown count={scene.timeout} />}
-        {scene.data &&
-          scene.data.map((action) => (
-            <Button
-              key={action[0]}
-              className="mb-2"
-              onClick={() => {
-                handleActionClick(scene.action, action[1]);
-              }}
-            >
-              {action[0]}
-            </Button>
-          ))}
+        {scene.data && (
+          <SceneSelector type={scene.action} actions={scene.data} />
+        )}
       </div>
     );
   }

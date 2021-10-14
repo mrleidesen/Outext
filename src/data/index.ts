@@ -1,6 +1,6 @@
-import { TScene, TAction, TActionData } from "@/types";
+import { TScene, TAction, TActionList } from "@/types";
 
-const action = (data: TActionData, timeout?: number): TAction => {
+const action = (data: TActionList, timeout?: number): TAction => {
   return {
     action: "select",
     data,
@@ -22,7 +22,7 @@ export const screenplay: { [key: string]: TScene } = {
     "你叫王大铁，好在你没有忘记自己的名字",
     "一直呆着也不是办法，你壮起胆子准备四处探索一番，总有方法出去的，你决定",
     action([
-      ["直接用椅子打碎窗户", "2"],
+      ["直接用椅子打碎窗户", "2", [{ type: "power", minValue: 5 }]],
       ["尝试打开房间的门", "3"],
     ]),
   ],
