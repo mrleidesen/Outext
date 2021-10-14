@@ -8,6 +8,7 @@ import {
   TActionList,
   TActionType,
   TActionLimit,
+  TActionData,
 } from "@/types";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
@@ -18,16 +19,22 @@ export const TextLoader = () => {
   const [showIndex, setShowIndex] = useState(1);
   const sceneLoader = scene.slice(0, showIndex);
   const lastIsString = typeof sceneLoader[showIndex - 1] === "string";
+  let isDisabled = false;
 
   useEffect(() => {
     setShowIndex(1);
     setScene(screenplay[select]);
   }, [select]);
 
+  useEffect(() => {
+    isDisabled = false;
+  }, [showIndex]);
+
   const handleNext = () => {
-    if (!lastIsString) {
+    if (!lastIsString || isDisabled) {
       return;
     }
+    isDisabled = true;
     setShowIndex((idx) => idx + 1);
   };
 
@@ -37,7 +44,12 @@ export const TextLoader = () => {
         <SceneItem key={idx} scene={item} />
       ))}
       {lastIsString && (
-        <Button className="fixed bottom-4 w-5/6" onClick={handleNext}>
+        <Button
+          className={`fixed bottom-4 w-5/6 ${
+            isDisabled ? "pointer-events-none" : ""
+          }`}
+          onClick={handleNext}
+        >
           下一步
         </Button>
       )}
@@ -54,11 +66,15 @@ const SceneSelector = ({
 }) => {
   const { user, setSelect, setDeathCount } = useStore();
 
-  const handleActionClick = (type: TActionType, select: string) => {
+  const handleActionClick = (type: TActionType, action: TActionData) => {
     if (type === "end") {
       setDeathCount((count) => count + 1);
     }
-    setSelect(select);
+    if (action[3] && !isFits(action[2])) {
+      setSelect(action[3]);
+      return;
+    }
+    setSelect(action[1]);
   };
 
   const isFits = (values?: TActionLimit[]): boolean => {
@@ -81,13 +97,13 @@ const SceneSelector = ({
   return (
     <>
       {actions.map((action) => {
-        if (isFits(action[2])) {
+        if (action[3] || isFits(action[2])) {
           return (
             <Button
               key={action[0]}
               className="mb-2"
               onClick={() => {
-                handleActionClick(type, action[1]);
+                handleActionClick(type, action);
               }}
             >
               {action[0]}
@@ -100,8 +116,7 @@ const SceneSelector = ({
 };
 
 const SceneItem = ({ scene }: { scene: string | TAction }) => {
-  const { setSelect, setIsFinish, setDeathCount, setGameFinishTime } =
-    useStore();
+  const { setSelect, setIsFinish, setGameFinishTime } = useStore();
   const itemIsString = typeof scene === "string";
 
   if (itemIsString) {

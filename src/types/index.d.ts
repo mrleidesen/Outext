@@ -1,7 +1,8 @@
 export type TScene = (string | TAction)[];
 
 type TActionLabel = string;
-type TActionValue = string;
+type TActionSuccess = string;
+type TActionFail = string;
 
 export type TLimitType = "power" | "speed" | "wise" | "sneak" | "luck";
 
@@ -10,7 +11,12 @@ export type TActionLimit = {
   minValue: number;
 };
 
-export type TActionData = [TActionLabel, TActionValue, TActionLimit[]?];
+export type TActionData = [
+  TActionLabel,
+  TActionSuccess,
+  TActionLimit[]?,
+  TActionFail?
+];
 
 export type TActionList = TActionData[];
 
