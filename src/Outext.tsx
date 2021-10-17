@@ -17,7 +17,7 @@ export default function Outext() {
 }
 
 const GameMenu = () => {
-  const VERSION = "2.0.3";
+  const VERSION = "2.0.4";
   const [isUserSet, setIsUserSet] = useState(false);
 
   const handleGameStart = () => {
@@ -61,7 +61,14 @@ const GameMenu = () => {
 };
 
 const GameStart = () => {
-  const { user, setUser, setIsStart, setGameFinishTime } = useStore();
+  const {
+    user,
+    setUser,
+    setIsStart,
+    setGameFinishTime,
+    setAttributeCount,
+    attributeCount,
+  } = useStore();
   const maxValue = 10;
   const userKeys = Object.keys(user) as TLimitType[];
   const typeMap: { [key in TLimitType]: string } = {
@@ -95,10 +102,10 @@ const GameStart = () => {
   };
 
   // 玩家自己随机属性
-  // const handleRandom = () => {
-  //   initUser();
-  //   setAttributeCount(attributeCount + 1);
-  // };
+  const handleRandom = () => {
+    initUser();
+    setAttributeCount(attributeCount + 1);
+  };
 
   return (
     <div className="flex flex-col mx-auto h-full justify-center items-center pt-5">
@@ -112,9 +119,9 @@ const GameStart = () => {
         </p>
       ))}
 
-      {/* <Button className="mt-20" onClick={handleRandom}>
+      <Button className="mt-20" onClick={handleRandom}>
         随机属性
-      </Button> */}
+      </Button>
       <Button className="mt-4" onClick={handleEnterGame}>
         开始冒险
       </Button>
@@ -123,14 +130,14 @@ const GameStart = () => {
 };
 
 const GameFinish = () => {
-  const { gameFinishTime, deathCount, restart } = useStore();
+  const { gameFinishTime, deathCount, restart, attributeCount } = useStore();
   const [startTime, finishTime] = gameFinishTime;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
       <h1 className="text-4xl mb-2">恭喜你通关了</h1>
       <p className="my-1">你总共死了 {deathCount} 次</p>
-      {/* <p className="my-1">你随机了 {attributeCount} 次属性才找到你满意的</p> */}
+      <p className="my-1">你随机了 {attributeCount} 次属性才找到你满意的</p>
       <p>通关时间 {formatTime(startTime, finishTime)} 分钟</p>
 
       <Button className="my-2" onClick={() => restart()}>

@@ -81,7 +81,7 @@ export const screenplay: { [key: string]: TScene } = {
     "你顺着走廊走着，走廊的尽头是个安全通道，或许能从这儿出去？",
     "但是安全通道的锁非常坚固，你手上并没有钥匙",
     action([
-      ["一拳干碎门锁", "one-punch-door", [{ type: "power", minValue: 6 }]],
+      ["一拳干碎门锁", "one-punch-door", [{ type: "power", minValue: 7 }]],
       [
         "撬锁",
         "unlock-door-success",
@@ -128,15 +128,15 @@ export const screenplay: { [key: string]: TScene } = {
         [
           "跑！",
           "up-run-success",
-          [{ type: "speed", minValue: 6 }],
+          [{ type: "speed", minValue: 7 }],
           "run-fail",
         ],
         [
           "一脚踢飞",
           "up-kick-success",
           [
-            { type: "power", minValue: 5 },
-            { type: "speed", minValue: 5 },
+            { type: "power", minValue: 6 },
+            { type: "speed", minValue: 6 },
           ],
           "kick-fail",
         ],
@@ -154,8 +154,8 @@ export const screenplay: { [key: string]: TScene } = {
           "一脚踢飞",
           "down-kick-success",
           [
-            { type: "power", minValue: 5 },
-            { type: "speed", minValue: 5 },
+            { type: "power", minValue: 6 },
+            { type: "speed", minValue: 6 },
           ],
           "kick-fail",
         ],
@@ -210,7 +210,7 @@ export const screenplay: { [key: string]: TScene } = {
     "你探索了周边",
     "这边的房间并不是很多",
     action([
-      ["去管理室", "find-trap", [{ type: "luck", minValue: 6 }], "enter-trap"],
+      ["去管理室", "find-trap", [{ type: "luck", minValue: 7 }], "enter-trap"],
       ["去消毒间", "clean-room-with-lock"],
       ["去厕所", "toilet-room"],
       ["去药品室", "pill-room-with-lock"],
@@ -252,7 +252,7 @@ export const screenplay: { [key: string]: TScene } = {
     "这串钥匙应该可以打开这个走廊的不同房间",
     action([
       ["去安全通道", "corridor-save"],
-      ["查看抽屉内侧", "find-msg-1", [{ type: "wise", minValue: 5 }]],
+      ["查看抽屉内侧", "find-msg-1", [{ type: "wise", minValue: 6 }]],
       ["去消毒间", "clean-room"],
       ["去厕所", "toilet-room"],
       ["去药品室", "pill-room"],
@@ -272,7 +272,7 @@ export const screenplay: { [key: string]: TScene } = {
   "clean-room-with-lock": [
     "房门被锁住了，或许某处能拿到钥匙",
     action([
-      ["去管理室", "find-trap", [{ type: "luck", minValue: 5 }], "enter-trap"],
+      ["去管理室", "find-trap", [{ type: "luck", minValue: 6 }], "enter-trap"],
       ["去厕所", "toilet-room"],
       ["去药品室", "pill-room-with-lock"],
     ]),
@@ -371,7 +371,7 @@ export const screenplay: { [key: string]: TScene } = {
         "蛮王冲撞！",
         "rush-success",
         [
-          { type: "power", minValue: 7 },
+          { type: "power", minValue: 8 },
           { type: "speed", minValue: 7 },
         ],
         "rush-fail",
@@ -432,7 +432,7 @@ export const screenplay: { [key: string]: TScene } = {
         [
           "胡乱一拳",
           "punch-whatever-success",
-          [{ type: "power", minValue: 7 }],
+          [{ type: "power", minValue: 8 }],
           "punch-whatever-fail",
         ],
       ],
