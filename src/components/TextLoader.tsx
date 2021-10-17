@@ -111,7 +111,7 @@ const SceneSelector = ({
           return (
             <Button
               key={action[0]}
-              className="mb-2"
+              className="mb-4"
               onClick={() => {
                 handleActionClick(type, action);
               }}
