@@ -467,7 +467,7 @@ export const screenplay: { [key: string]: TScene } = {
     "上面有几个选项，你要选择哪一个？",
     action([
       ["打开开关", "switch-on-fail"],
-      ["设置频率", "settings-frequency", [{ type: "wise", minValue: 6 }]],
+      ["设置频率", "settings-frequency", [{ type: "wise", minValue: 3 }]],
       ["设置图形", "settings-image-first"],
       ["去楼下", "hall-save"],
     ]),

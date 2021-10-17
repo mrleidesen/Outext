@@ -17,7 +17,7 @@ export default function Outext() {
 }
 
 const GameMenu = () => {
-  const VERSION = "2.0.1";
+  const VERSION = "2.0.2";
   const [isUserSet, setIsUserSet] = useState(false);
 
   const handleGameStart = () => {
@@ -30,7 +30,16 @@ const GameMenu = () => {
         <GameStart />
       ) : (
         <div className="flex flex-col items-center justify-center h-full">
-          <h1 className="text-7xl mb-10 font-semibold">Outext</h1>
+          <h1
+            className="text-7xl mb-10 font-extrabold bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500"
+            style={{
+              transform: "rotate3d(10, 1, 1, -23deg)",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            Outext
+          </h1>
           <a
             target="_blank"
             className="text-xs text-center my-2"
