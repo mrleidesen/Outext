@@ -573,4 +573,5 @@ export const screenplay: { [key: string]: TScene } = {
     "达成邪恶结局",
     finishAction,
   ],
+  "end-noselect": ["你愣住了，什么也没做", "被作者制裁了", endAction],
 };
