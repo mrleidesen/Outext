@@ -17,7 +17,7 @@ export default function Outext() {
 }
 
 const GameMenu = () => {
-  const VERSION = "2.0.0";
+  const VERSION = "2.0.1";
   const [isUserSet, setIsUserSet] = useState(false);
 
   const handleGameStart = () => {
