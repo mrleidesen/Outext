@@ -4,7 +4,7 @@ type TActionLabel = string;
 type TActionSuccess = string;
 type TActionFail = string;
 
-export type TLimitType = "power" | "speed" | "wise" | "sneak" | "luck";
+export type TLimitType = "power" | "speed" | "wise" | "luck";
 
 export type TActionLimit = {
   type: TLimitType;

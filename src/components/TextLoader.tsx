@@ -64,17 +64,27 @@ const SceneSelector = ({
   actions: TActionList;
   type: TActionType;
 }) => {
-  const { user, setSelect, setDeathCount } = useStore();
+  const { user, setSelect, setDeathCount, saveSelect, setSaveSelect } =
+    useStore();
 
   const handleActionClick = (type: TActionType, action: TActionData) => {
     if (type === "end") {
       setDeathCount((count) => count + 1);
-    }
-    if (action[3] && !isFits(action[2])) {
-      setSelect(action[3]);
+      changeScene(saveSelect);
       return;
     }
-    setSelect(action[1]);
+    if (action[3] && !isFits(action[2])) {
+      changeScene(action[3]);
+      return;
+    }
+    changeScene(action[1]);
+  };
+
+  const changeScene = (select: string) => {
+    if (select.includes("save") && select !== saveSelect) {
+      setSaveSelect(select);
+    }
+    setSelect(select);
   };
 
   const isFits = (values?: TActionLimit[]): boolean => {

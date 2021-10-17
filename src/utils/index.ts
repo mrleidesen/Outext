@@ -10,3 +10,10 @@ export const formatTime = (start: number, end: number) => {
 
   return (time / 1000 / 60).toFixed(1);
 };
+
+export const getRandomName = () => {
+  const nameList = ["王大铁", "李家毛", "刘石板", "王二狗"];
+  const randomNumber = getRandomNumber(0, 3);
+
+  return nameList[randomNumber];
+};

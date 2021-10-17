@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStore } from "@/store";
 import { TextLoader } from "@/components/TextLoader";
 import { Button } from "@/components/Button";
@@ -52,42 +52,48 @@ const GameMenu = () => {
 };
 
 const GameStart = () => {
-  const {
-    user,
-    attributeCount,
-    setUser,
-    setIsStart,
-    setGameFinishTime,
-    setAttributeCount,
-  } = useStore();
+  const { user, setUser, setIsStart, setGameFinishTime } = useStore();
   const maxValue = 10;
   const userKeys = Object.keys(user) as TLimitType[];
   const typeMap: { [key in TLimitType]: string } = {
     power: "力量",
-    speed: "速度",
+    speed: "技巧",
     wise: "智慧",
-    sneak: "潜行",
     luck: "幸运",
   };
+
+  useEffect(() => {
+    initUser();
+  }, []);
 
   const handleEnterGame = () => {
     setGameFinishTime([Date.now()]);
     setIsStart(true);
   };
 
-  const handleRandom = () => {
+  const onRandomUserAttributes = () => {
     const userAttributes = { ...user };
 
     for (const key of userKeys) {
       userAttributes[key] = getRandomNumber();
     }
 
-    setUser(userAttributes);
-    setAttributeCount(attributeCount + 1);
+    return userAttributes;
   };
+
+  const initUser = () => {
+    setUser(onRandomUserAttributes());
+  };
+
+  // 玩家自己随机属性
+  // const handleRandom = () => {
+  //   initUser();
+  //   setAttributeCount(attributeCount + 1);
+  // };
 
   return (
     <div className="flex flex-col mx-auto h-full justify-center items-center pt-5">
+      <p>以下是随机生成的人物属性</p>
       {userKeys.map((key) => (
         <p key={key}>
           <span>{typeMap[key]}：</span>
@@ -97,9 +103,9 @@ const GameStart = () => {
         </p>
       ))}
 
-      <Button className="mt-20" onClick={handleRandom}>
+      {/* <Button className="mt-20" onClick={handleRandom}>
         随机属性
-      </Button>
+      </Button> */}
       <Button className="mt-4" onClick={handleEnterGame}>
         开始冒险
       </Button>
@@ -108,14 +114,14 @@ const GameStart = () => {
 };
 
 const GameFinish = () => {
-  const { gameFinishTime, deathCount, attributeCount, restart } = useStore();
+  const { gameFinishTime, deathCount, restart } = useStore();
   const [startTime, finishTime] = gameFinishTime;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
       <h1 className="text-4xl mb-2">恭喜你通关了</h1>
       <p className="my-1">你总共死了 {deathCount} 次</p>
-      <p className="my-1">你随机了 {attributeCount} 次属性才找到你满意的</p>
+      {/* <p className="my-1">你随机了 {attributeCount} 次属性才找到你满意的</p> */}
       <p>通关时间 {formatTime(startTime, finishTime)} 分钟</p>
 
       <Button className="my-2" onClick={() => restart()}>

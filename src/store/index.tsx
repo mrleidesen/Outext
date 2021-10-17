@@ -19,6 +19,8 @@ interface Store {
   attributeCount: number;
   setAttributeCount: SetStateAction<number>;
   restart: () => void;
+  saveSelect: string;
+  setSaveSelect: SetStateAction<string>;
 }
 
 const StoreContext = createContext<Store>({} as Store);
@@ -26,15 +28,16 @@ const StoreContext = createContext<Store>({} as Store);
 export const useStore = () => useContext(StoreContext);
 
 export const Store: FC = ({ children }) => {
+  const defaultSelect = "game-open";
   const [user, setUser] = useState<User>({
     power: 5,
     speed: 5,
     wise: 5,
-    sneak: 5,
     luck: 5,
   });
   const [isStart, setIsStart] = useState(false);
-  const [select, setSelect] = useState("1");
+  const [select, setSelect] = useState(defaultSelect);
+  const [saveSelect, setSaveSelect] = useState(defaultSelect);
   const [isFinish, setIsFinish] = useState(false);
   const [deathCount, setDeathCount] = useState(0);
   const [attributeCount, setAttributeCount] = useState(0);
@@ -42,7 +45,8 @@ export const Store: FC = ({ children }) => {
 
   const restart = () => {
     setIsStart(false);
-    setSelect("1");
+    setSelect(defaultSelect);
+    setSaveSelect(defaultSelect);
     setIsFinish(false);
     setDeathCount(0);
     setAttributeCount(0);
@@ -67,6 +71,8 @@ export const Store: FC = ({ children }) => {
         gameFinishTime,
         setGameFinishTime,
         restart,
+        saveSelect,
+        setSaveSelect,
       }}
     >
       {children}
