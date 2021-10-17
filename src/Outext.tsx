@@ -17,7 +17,7 @@ export default function Outext() {
 }
 
 const GameMenu = () => {
-  const VERSION = "2.0.4";
+  const VERSION = "2.0.5";
   const [isUserSet, setIsUserSet] = useState(false);
 
   const handleGameStart = () => {
@@ -69,6 +69,7 @@ const GameStart = () => {
     setAttributeCount,
     attributeCount,
   } = useStore();
+  const [msg, setMsg] = useState("");
   const maxValue = 10;
   const userKeys = Object.keys(user) as TLimitType[];
   const typeMap: { [key in TLimitType]: string } = {
@@ -103,13 +104,21 @@ const GameStart = () => {
 
   // 玩家自己随机属性
   const handleRandom = () => {
+    const count = attributeCount + 1;
     initUser();
-    setAttributeCount(attributeCount + 1);
+    setAttributeCount(count);
+    if (count >= 30 && count < 50) {
+      setMsg(`你已经随机了${count}次了，休息一下吧`);
+    } else if (count >= 50 && count < 100) {
+      setMsg(`你已经刷了${count}次了，真刷不到想要的就放弃吧`);
+    } else if (count >= 100) {
+      setMsg(`你已经刷了${count}次了，求求你了，别刷了！刷不到了！`);
+    }
   };
 
   return (
-    <div className="flex flex-col mx-auto h-full justify-center items-center pt-5">
-      <p>以下是随机生成的人物属性</p>
+    <div className="flex flex-col mx-auto text-center h-full justify-center items-center pt-5">
+      {msg && <p>{msg}</p>}
       {userKeys.map((key) => (
         <p key={key}>
           <span>{typeMap[key]}：</span>
