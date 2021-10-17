@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 
 import { useStore } from "@/store";
 import { screenplay } from "@/data";
-import { TScene, TAction } from "@/types";
+import {
+  TScene,
+  TAction,
+  TActionList,
+  TActionType,
+  TActionLimit,
+  TActionData,
+} from "@/types";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
 
@@ -12,16 +19,22 @@ export const TextLoader = () => {
   const [showIndex, setShowIndex] = useState(1);
   const sceneLoader = scene.slice(0, showIndex);
   const lastIsString = typeof sceneLoader[showIndex - 1] === "string";
+  let isDisabled = false;
 
   useEffect(() => {
     setShowIndex(1);
     setScene(screenplay[select]);
   }, [select]);
 
+  useEffect(() => {
+    isDisabled = false;
+  }, [showIndex]);
+
   const handleNext = () => {
-    if (!lastIsString) {
+    if (!lastIsString || isDisabled) {
       return;
     }
+    isDisabled = true;
     setShowIndex((idx) => idx + 1);
   };
 
@@ -31,7 +44,12 @@ export const TextLoader = () => {
         <SceneItem key={idx} scene={item} />
       ))}
       {lastIsString && (
-        <Button className="fixed bottom-4 w-5/6" onClick={handleNext}>
+        <Button
+          className={`fixed bottom-4 w-5/6 ${
+            isDisabled ? "pointer-events-none" : ""
+          }`}
+          onClick={handleNext}
+        >
           下一步
         </Button>
       )}
@@ -39,9 +57,76 @@ export const TextLoader = () => {
   );
 };
 
-const SceneItem = ({ scene }: { scene: string | TAction }) => {
-  const { setSelect, setIsFinish, setDeathCount, setGameFinishTime } =
+const SceneSelector = ({
+  actions,
+  type,
+}: {
+  actions: TActionList;
+  type: TActionType;
+}) => {
+  const { user, setSelect, setDeathCount, saveSelect, setSaveSelect } =
     useStore();
+
+  const handleActionClick = (type: TActionType, action: TActionData) => {
+    if (type === "end") {
+      setDeathCount((count) => count + 1);
+      changeScene(saveSelect);
+      return;
+    }
+    if (action[3] && !isFits(action[2])) {
+      changeScene(action[3]);
+      return;
+    }
+    changeScene(action[1]);
+  };
+
+  const changeScene = (select: string) => {
+    if (select.includes("save") && select !== saveSelect) {
+      setSaveSelect(select);
+    }
+    setSelect(select);
+  };
+
+  const isFits = (values?: TActionLimit[]): boolean => {
+    let isFits = true;
+
+    if (values) {
+      for (const limit of values) {
+        const { type, minValue } = limit;
+        const userValue = user[type];
+        if (userValue < minValue) {
+          isFits = false;
+          break;
+        }
+      }
+    }
+
+    return isFits;
+  };
+
+  return (
+    <>
+      {actions.map((action) => {
+        if (action[3] || isFits(action[2])) {
+          return (
+            <Button
+              key={action[0]}
+              className="mb-2"
+              onClick={() => {
+                handleActionClick(type, action);
+              }}
+            >
+              {action[0]}
+            </Button>
+          );
+        }
+      })}
+    </>
+  );
+};
+
+const SceneItem = ({ scene }: { scene: string | TAction }) => {
+  const { setSelect, setIsFinish, setGameFinishTime } = useStore();
   const itemIsString = typeof scene === "string";
 
   if (itemIsString) {
@@ -76,29 +161,13 @@ const SceneItem = ({ scene }: { scene: string | TAction }) => {
     };
   }, [scene.timeout]);
 
-  const handleActionClick = (type: string, select: string) => {
-    if (type === "end") {
-      setDeathCount((count) => count + 1);
-    }
-    setSelect(select);
-  };
-
   if (scene.action === "select" || scene.action === "end") {
     return (
       <div className="flex flex-col w-full mt-3">
         {scene.timeout && <Countdown count={scene.timeout} />}
-        {scene.data &&
-          scene.data.map((action) => (
-            <Button
-              key={action[0]}
-              className="mb-2"
-              onClick={() => {
-                handleActionClick(scene.action, action[1]);
-              }}
-            >
-              {action[0]}
-            </Button>
-          ))}
+        {scene.data && (
+          <SceneSelector type={scene.action} actions={scene.data} />
+        )}
       </div>
     );
   }
