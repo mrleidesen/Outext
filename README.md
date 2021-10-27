@@ -13,7 +13,7 @@
 ## 运行
 
 ```shell
-npm install pnpm
+npm install -g pnpm
 
 pnpm install
 
