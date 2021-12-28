@@ -1,11 +1,9 @@
-import { User } from "@/types";
+import type { User } from "@/types";
 import React, { FC, createContext, useContext, useState } from "react";
 
 type SetStateAction<T> = React.Dispatch<React.SetStateAction<T>>;
 
 interface Store {
-  user: User;
-  setUser: SetStateAction<User>;
   isStart: boolean;
   setIsStart: SetStateAction<boolean>;
   select: string;
@@ -19,13 +17,29 @@ interface Store {
   attributeCount: number;
   setAttributeCount: SetStateAction<number>;
   restart: () => void;
+}
+
+interface UserProps {
+  user: User;
+  setUser: SetStateAction<User>;
+}
+
+interface SaveProps {
   saveSelect: string;
   setSaveSelect: SetStateAction<string>;
 }
 
 const StoreContext = createContext<Store>({} as Store);
 
+const UserContext = createContext<UserProps>({} as UserProps);
+
+const SaveContext = createContext<SaveProps>({} as SaveProps);
+
 export const useStore = () => useContext(StoreContext);
+
+export const useUser = () => useContext(UserContext);
+
+export const useSave = () => useContext(SaveContext);
 
 export const Store: FC = ({ children }) => {
   const defaultSelect = "game-open";
@@ -56,8 +70,6 @@ export const Store: FC = ({ children }) => {
   return (
     <StoreContext.Provider
       value={{
-        user,
-        setUser,
         isStart,
         setIsStart,
         select,
@@ -71,11 +83,13 @@ export const Store: FC = ({ children }) => {
         gameFinishTime,
         setGameFinishTime,
         restart,
-        saveSelect,
-        setSaveSelect,
       }}
     >
-      {children}
+      <UserContext.Provider value={{ user, setUser }}>
+        <SaveContext.Provider value={{ saveSelect, setSaveSelect }}>
+          {children}
+        </SaveContext.Provider>
+      </UserContext.Provider>
     </StoreContext.Provider>
   );
 };

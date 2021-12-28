@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useStore } from "@/store";
+import React from "react";
+import { useStore, useUser } from "@/store";
 import { TextLoader } from "@/components/TextLoader";
 import { Button } from "@/components/Button";
 import { getRandomNumber, formatTime } from "./utils";
-import { TLimitType } from "./types";
+import type { TLimitType } from "./types";
 
 export default function Outext() {
   const { isStart, isFinish } = useStore();
   return (
     <div className="w-screen h-screen overflow-hidden bg-gray-800 text-white select-none">
       <div className="container mx-auto h-full">
-        {isStart ? isFinish ? <GameFinish /> : <TextLoader /> : <GameMenu />}
+        {isStart && isFinish && <GameFinish />}
+        {isStart && !isFinish && <TextLoader />}
+        {!isStart && <GameMenu />}
       </div>
     </div>
   );
@@ -18,7 +20,7 @@ export default function Outext() {
 
 const GameMenu = () => {
   const VERSION = "2.0.5";
-  const [isUserSet, setIsUserSet] = useState(false);
+  const [isUserSet, setIsUserSet] = React.useState(false);
 
   const handleGameStart = () => {
     setIsUserSet(true);
@@ -61,15 +63,10 @@ const GameMenu = () => {
 };
 
 const GameStart = () => {
-  const {
-    user,
-    setUser,
-    setIsStart,
-    setGameFinishTime,
-    setAttributeCount,
-    attributeCount,
-  } = useStore();
-  const [msg, setMsg] = useState("");
+  const { setIsStart, setGameFinishTime, setAttributeCount, attributeCount } =
+    useStore();
+  const { user, setUser } = useUser();
+  const [msg, setMsg] = React.useState("");
   const maxValue = 10;
   const userKeys = Object.keys(user) as TLimitType[];
   const typeMap: { [key in TLimitType]: string } = {
@@ -79,7 +76,7 @@ const GameStart = () => {
     luck: "幸运",
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     initUser();
   }, []);
 
