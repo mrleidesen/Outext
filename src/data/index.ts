@@ -1,4 +1,4 @@
-import { TScene, TAction, TActionList, TActionLimit } from "@/types";
+import type { TScene, TAction, TActionList, TActionLimit } from "@/types";
 import { getRandomName } from "@/utils";
 
 const action = (data: TActionList, timeout?: number): TAction => {

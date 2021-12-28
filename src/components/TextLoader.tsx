@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { useStore } from "@/store";
+import { useSave, useStore, useUser } from "@/store";
 import { screenplay } from "@/data";
-import {
+import type {
   TScene,
   TAction,
   TActionList,
@@ -15,18 +15,18 @@ import { Countdown } from "./Countdown";
 
 export const TextLoader = () => {
   const { select } = useStore();
-  const [scene, setScene] = useState<TScene>([]);
-  const [showIndex, setShowIndex] = useState(1);
+  const [scene, setScene] = React.useState<TScene>([]);
+  const [showIndex, setShowIndex] = React.useState(1);
   const sceneLoader = scene.slice(0, showIndex);
   const lastIsString = typeof sceneLoader[showIndex - 1] === "string";
   let isDisabled = false;
 
-  useEffect(() => {
+  React.useEffect(() => {
     setShowIndex(1);
     setScene(screenplay[select]);
   }, [select]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     isDisabled = false;
   }, [showIndex]);
 
@@ -64,8 +64,9 @@ const SceneSelector = ({
   actions: TActionList;
   type: TActionType;
 }) => {
-  const { user, setSelect, setDeathCount, saveSelect, setSaveSelect } =
-    useStore();
+  const { setSelect, setDeathCount } = useStore();
+  const { user } = useUser();
+  const { saveSelect, setSaveSelect } = useSave();
 
   const handleActionClick = (type: TActionType, action: TActionData) => {
     if (type === "end") {
@@ -133,7 +134,7 @@ const SceneItem = ({ scene }: { scene: string | TAction }) => {
     return <p className="text-center mb-1.5">{scene}</p>;
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     let timer: number | null = null;
 
     const setTimer = () => {
