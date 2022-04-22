@@ -493,8 +493,8 @@ export const screenplay: { [key: string]: TScene } = {
       [
         ["三角形", "settings-fail"],
         ["正方形", "settings-fail"],
-        ["梯形", "settings-success"],
-        ["长方形", "settings-fail"],
+        ["梯形", "settings-fail"],
+        ["长方形", "settings-success"],
         ["圆形", "settings-fail"],
       ],
       15
